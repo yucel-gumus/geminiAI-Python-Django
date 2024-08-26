@@ -1,2 +1,9 @@
 
+<<<<<<< HEAD
 .env
+=======
+.env
+.venv
+
+db.sqlite3
+>>>>>>> 9e11e90 ( UI change)
