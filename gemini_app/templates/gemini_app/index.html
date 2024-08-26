@@ -4,34 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gemini AI Sohbet</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        #chat-history {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .chat-message {
+            margin-bottom: 10px;
+        }
+        .chat-message strong {
+            color: #007bff;
+        }
+        .btn-clear-history {
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Gemini AI Sohbet</h1>
-    <form action="/" method="post">
-        {% csrf_token %}
-        <label for="input_text">Sorunu Yaz:</label>
-        <style>
-            #input_text {
-                resize: none;
-            }
-            pre {
-            background-color: #f4f4f4;
-            padding: 10px;
-            border: 1px solid #ddd;
-            white-space: pre-wrap;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        </style>
-        <textarea name="input_text" id="input_text" cols="100" rows="8" required></textarea>
-        <br>
-        <br>
-        <button type="submit">Gönder</button>
-        <button type="submit" name="clear_history" value="true">Sohbet Geçmişini Temizle</button>
-    </form>
-    <div id="chat-history">
-        {% for message in chat_history %}
-            <pre><strong>{{ message.role }}:</strong> {{ message.text }}</pre>
-        {% endfor %}
+    <div class="container">
+        <h1 class="mb-4">Gemini AI Sohbet</h1>
+        <form id="chat-form" action="/" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="input_text">Sorunu Yaz:</label>
+                <textarea name="input_text" id="input_text" class="form-control" rows="6" required></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Gönder</button>
+                <button type="button" id="clear-history-button" class="btn btn-danger btn-clear-history">Sohbet Geçmişini Temizle</button>
+            </div>
+        </form>
+        <div id="chat-history">
+            {% for message in chat_history %}
+                <div class="chat-message">
+                    <strong>{{ message.role }}:</strong> {{ message.text }}
+                </div>
+            {% endfor %}
+        </div>
     </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('clear-history-button').addEventListener('click', function() {
+            // Clear chat history
+            document.getElementById('chat-history').innerHTML = '';
+
+            // Create a hidden form to send the clear history request
+            const form = document.getElementById('chat-form');
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'clear_history';
+            input.value = 'true';
+            form.appendChild(input);
+
+            // Submit the form
+            form.submit();
+        });
+    </script>
 </body>
 </html>
